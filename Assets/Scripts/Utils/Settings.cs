@@ -1,11 +1,14 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace Utils {
     public class Settings : MonoBehaviour {
         public Toggle crtToggle;
-        [SerializeField] private Renderer2DData renderer2DData; 
+        [SerializeField] private GameObject confirmWindow;
+        [SerializeField] private Renderer2DData renderer2DData;
 
         private CRTFilter.CRTRendererFeature crtFilter;
         private bool canUpdate;
@@ -33,8 +36,18 @@ namespace Utils {
             Time.timeScale = 1;
         }
 
-        public void ExitGame() {
-            Application.Quit();
+        public void ConfirmWindow() {
+            confirmWindow.SetActive(true);
+            // Application.Quit();
+        }
+
+        public void ToTitle() {
+            SceneManager.LoadScene("Title");
+        }
+
+        private void OnDisable() {
+            if (gameObject != null)
+                Time.timeScale = 1;
         }
 
         public void ScreenColor(int color) {

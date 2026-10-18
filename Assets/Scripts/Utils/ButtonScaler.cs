@@ -52,7 +52,6 @@ namespace Utils {
         public void OnMouseExit() {
             if (scaleRoutine != null) StopCoroutine(scaleRoutine);
             scaleRoutine = StartCoroutine(ScaleButton(originalSize));
-            Debug.Log(originalSize);
         }
 
         public void ShowInfo() {

@@ -14,6 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SimpleAudioManager.Song
   reverbTail: 2
   intensityClips:
-  - {fileID: 8300000, guid: f02fad72dea054d94a402300c42195b1, type: 3}
-  - {fileID: 8300000, guid: c9f481491c86e4a27bffab9d6d498c3d, type: 3}
   - {fileID: 8300000, guid: d9fad667e9257491abd740bc3149f0be, type: 3}

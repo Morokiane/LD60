@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 using TMPro;
 
 namespace Controllers {
-    [System.Serializable]
+    [Serializable]
     public class BBSUser {
         public float downloadDemand;
         public float uploadDemand;
@@ -28,7 +28,7 @@ namespace Controllers {
         [Header("Hardware Limits")]
         [SerializeField] private int modemsPerServer = 4;
         [SerializeField] private int usersPerModem = 4;
-        [SerializeField] private int modemPorts = 0;
+        [SerializeField] private int modemPorts;
 
         [Header("Hardware Reliability")]
         [SerializeField] private float modemFailureChancePerMinute = 0.02f;
@@ -94,6 +94,8 @@ namespace Controllers {
         [Header("Monthly Bill")]
         [SerializeField] private GameClock gameClock;
         [SerializeField] private float monthlyBillAmount = 250f;
+        [SerializeField] private float modemBillIncrease = 0.10f;
+        [SerializeField] private float serverBillIncrease = 0.25f;
 
         [Header("Info")]
         [SerializeField] private TextMeshProUGUI infoText;
@@ -114,6 +116,8 @@ namespace Controllers {
         public bool IsShutdown => isShutdown;
 
         private void Start() {
+            Time.timeScale = 0;
+
             InitializeMonthlyBill();
             hardwareProtectionEnds = gameClock.CurrentDateTime.AddDays(gracePeriodInGameDays);
         }
@@ -186,6 +190,17 @@ namespace Controllers {
 
         public void PayMonthlyBillButton() {
             PayMonthlyBill();
+        }
+
+        public float MonthlyBillAmount {
+            get {
+                int additionalModems = Mathf.Max(0, modemCount - modemCount);
+                int additionServers = Mathf.Max(0, serverCount);
+
+                float increase = (additionalModems * modemBillIncrease) + (additionServers * serverBillIncrease);
+
+                return monthlyBillAmount * (1f + increase);
+            }
         }
 
         public bool AddRandomUser() {
@@ -320,7 +335,7 @@ namespace Controllers {
         }
 
         public void IncreaseModemPorts() {
-            if (modemPorts < 33 || Money < ModemPortsCost) {
+            if (modemPorts < 13 || Money < ModemPortsCost) {
                 usersPerModem += 4;
                 modemPorts += 4;
                 Money -= ModemPortsCost;
@@ -435,7 +450,7 @@ namespace Controllers {
 
         public bool IsBillButtonActive => !billPaid && gameClock != null && gameClock.CurrentDateTime >= billDueDate.AddDays(-5);
 
-        public float MonthlyBillAmount => monthlyBillAmount;
+        // public float MonthlyBillAmount => monthlyBillAmount;
 
         public DateTime BillDueDate => billDueDate;
     }
