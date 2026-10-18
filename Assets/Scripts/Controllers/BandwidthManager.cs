@@ -65,7 +65,8 @@ namespace Controllers {
         [SerializeField] private float feePerUserPerHour = 0.10f;
          
         // Overall network utilization is the busiest direction.
-        public float BandwidthUsage => Mathf.Max(DownloadUsage, UploadUsage);
+        // public float BandwidthUsage => Mathf.Max(DownloadUsage, UploadUsage);
+        public float BandwidthUsage => Mathf.Clamp01((DownloadDemand + UploadDemand) / (downloadCapacity + uploadCapacity));
         public int UserCount => users.Count;
 
         [Header("User Demand")]
@@ -230,10 +231,11 @@ namespace Controllers {
 
             if (users.Count >= MaxUsers) return false;
 
-            float availableUpload = uploadCapacity - GetCurrentUploadUsage();
+            /*float availableUpload = uploadCapacity - GetCurrentUploadUsage();
             float availableDownload = downloadCapacity - GetCurrentDownloadUsage();
 
-            if (upload > availableUpload || download > availableDownload) return false;
+            if (upload > availableUpload || download > availableDownload) return false;*/
+            if (DownloadDemand + UploadDemand + download + upload > downloadCapacity + uploadCapacity) return false;
             
             float duration = Random.Range(15f, 45f);
 

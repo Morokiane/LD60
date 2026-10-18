@@ -188,7 +188,7 @@ namespace Controllers {
         }
 
         public void OpenMenu() {
-            settingsWindow.SetActive(true);
+            settingsWindow.SetActive(!settingsWindow.activeSelf);
         }
 
         private void OnDestroy() {

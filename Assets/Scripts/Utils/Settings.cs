@@ -108,7 +108,7 @@ namespace Utils {
                 crtFilter.glitchNoiseSpeed = 0f;
                 
                 if (volume.profile.TryGet(out Bloom bloom))
-                    bloom.intensity.value = 1.5f;
+                    bloom.intensity.value = 1f;
                 // Subtle
                 // crtFilter.screenBend = 0.51f;
                 // crtFilter.vignetteSize = 5.7f;
