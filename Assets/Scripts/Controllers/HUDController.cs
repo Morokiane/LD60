@@ -83,14 +83,9 @@ namespace Controllers {
             while (true) {
                 bool isPeakHours = IsPeakHours();
 
-                float waitMultiplier = isPeakHours
-                    ? peakSpawnTimeMultiplier
-                    : 1f;
+                float waitMultiplier = isPeakHours ? peakSpawnTimeMultiplier : 1f;
 
-                float wait = Random.Range(
-                    minimumSpawnTime,
-                    maximumSpawnTime
-                ) * waitMultiplier;
+                float wait = Random.Range(minimumSpawnTime, maximumSpawnTime) * waitMultiplier;
 
                 yield return new WaitForSeconds(wait);
 
@@ -99,7 +94,6 @@ namespace Controllers {
                 float demand = bbsManager.ConnectionDemand;
 
                 if (isPeakHours) {
-                    // Almost every attempt succeeds during peak hours.
                     demand = Mathf.Max(demand, 0.95f);
                 }
 
@@ -145,7 +139,6 @@ namespace Controllers {
             downloadFill.fillAmount = downloadUsage;
             bandwidthFill.fillAmount = bandwidthUsage;
 
-            // Display current demand against available capacity.
             // uploadText.text = $"{bbsManager.UploadDemand:0.0} / " + $"{bbsManager.uploadCapacity:0.#}";
             // downloadText.text = $"{bbsManager.DownloadDemand:0.0} / " + $"{bbsManager.downloadCapacity:0.#}";
             uploadText.text = bbsManager.FormatBandwidth(bbsManager.uploadCapacity);

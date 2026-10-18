@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -9,9 +9,9 @@ namespace Utils {
         public Toggle crtToggle;
         [SerializeField] private GameObject confirmWindow;
         [SerializeField] private Renderer2DData renderer2DData;
+        [SerializeField] private Volume volume;
 
         private CRTFilter.CRTRendererFeature crtFilter;
-        private bool canUpdate;
 
         private void Start() {
             foreach (var feature in renderer2DData.rendererFeatures) {
@@ -22,9 +22,9 @@ namespace Utils {
                 }
             }
 
+            // Set to some defaults instead of my last unity setting
             CRT();
             ScreenColor(4);
-            canUpdate = true;
         }
 
         public void OnEnable() {
@@ -50,7 +50,7 @@ namespace Utils {
                 Time.timeScale = 1;
         }
 
-        public void ScreenColor(int color) {
+        private void ScreenColor(int color) {
             switch (color) {
                 case 0: // yellow
                     crtFilter.red = 2f;
@@ -84,7 +84,7 @@ namespace Utils {
             }
         }
 
-        public void CRT() {
+        private void CRT() {
             if (crtToggle.isOn) {
                 // Strong
                 crtFilter.screenBend = 0.51f;
@@ -106,6 +106,9 @@ namespace Utils {
                 crtFilter.glitchStrength = 0.232f;
                 crtFilter.glitchNoise = 0f;
                 crtFilter.glitchNoiseSpeed = 0f;
+                
+                if (volume.profile.TryGet(out Bloom bloom))
+                    bloom.intensity.value = 1.5f;
                 // Subtle
                 // crtFilter.screenBend = 0.51f;
                 // crtFilter.vignetteSize = 5.7f;
@@ -134,6 +137,9 @@ namespace Utils {
                 crtFilter.glitchStrength = 0;
                 crtFilter.glitchNoise = 0;
                 crtFilter.glitchNoiseSpeed = 0;
+                
+                if (volume.profile.TryGet(out Bloom bloom))
+                    bloom.intensity.value = 0f;
             }
         }
     }
