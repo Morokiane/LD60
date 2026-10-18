@@ -36,7 +36,7 @@ namespace Controllers {
 
         private void AdvanceMinute() {
             DateTime previousDate = currentDateTime.Date;
-            currentDateTime = currentDateTime.AddMinutes(1);
+            currentDateTime = currentDateTime.AddMinutes(10);
             OnTimeChanged?.Invoke(currentDateTime);
 
             if (currentDateTime.Date != previousDate) {

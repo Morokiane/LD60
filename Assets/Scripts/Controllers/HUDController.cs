@@ -57,6 +57,8 @@ namespace Controllers {
         [SerializeField] private float peakDemandMultiplier = 2.5f;
         [SerializeField] private float peakSpawnTimeMultiplier = 0.5f;
 
+        [SerializeField] private GameObject settingsWindow;
+
         private Coroutine userSpawnRoutine;
 
         private void Start() {
@@ -66,7 +68,6 @@ namespace Controllers {
                 return;
             }
 
-            // Initially display network capacity.
             uploadText.text = $"{bbsManager.uploadCapacity:0.#}";
             downloadText.text = $"{bbsManager.downloadCapacity:0.#}";
 
@@ -183,10 +184,6 @@ namespace Controllers {
 
             billButton.interactable = bbsManager.IsBillButtonActive && bbsManager.Money >= bbsManager.MonthlyBillAmount;
             billCost.text = $"{bbsManager.MonthlyBillAmount:N0}€";
-
-            // Bandwidth bar represents the busiest direction.
-            // A full bar indicates that at least one direction
-            // is at or above capacity.
         }
 
         public void RepairModem() {
@@ -195,6 +192,10 @@ namespace Controllers {
 
         public void RepairServer() {
             bbsManager.RepairServers();
+        }
+
+        public void OpenMenu() {
+            settingsWindow.SetActive(true);
         }
 
         private void OnDestroy() {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using TMPro;
 
 namespace Controllers {
     [System.Serializable]
@@ -32,6 +33,7 @@ namespace Controllers {
         [Header("Hardware Reliability")]
         [SerializeField] private float modemFailureChancePerMinute = 0.02f;
         [SerializeField] private float serverFailureChancePerMinute = 0.02f;
+        [SerializeField] private float gracePeriodInGameDays = 7f;
 
         [Header("Repair Costs")]
         [SerializeField] private float modemRepairCost = 15f;
@@ -93,6 +95,9 @@ namespace Controllers {
         [SerializeField] private GameClock gameClock;
         [SerializeField] private float monthlyBillAmount = 250f;
 
+        [Header("Info")]
+        [SerializeField] private TextMeshProUGUI infoText;
+
         private int modemUpgradesPurchased;
         private int modemPortsUpgradesPurchased;
         private int serverUpgradesPurchased;
@@ -102,11 +107,15 @@ namespace Controllers {
         private DateTime billDueDate;
         private bool billPaid;
         private bool isShutdown;
+        private DateTime hardwareProtectionEnds;
+        private bool hardwareProtectionActive = true;
+        private string info;
 
         public bool IsShutdown => isShutdown;
 
         private void Start() {
             InitializeMonthlyBill();
+            hardwareProtectionEnds = gameClock.CurrentDateTime.AddDays(gracePeriodInGameDays);
         }
 
         private void Update() {
@@ -147,6 +156,7 @@ namespace Controllers {
                 isShutdown = true;
 
                 users.Clear();
+                infoText.text = "Monthly bill overdue! BBS Shutdown";
                 Debug.Log("Monthly bill overdue! BBS Shutdown");
             }
         }
@@ -155,6 +165,7 @@ namespace Controllers {
             if (billPaid || !IsBillButtonActive) return false;
 
             if (Money < monthlyBillAmount) {
+                infoText.text = "Not enough money to pay bill";
                 Debug.Log("Not enough money to pay bill");
                 return false;
             }
@@ -168,6 +179,7 @@ namespace Controllers {
             billPaid = false;
             RefreshMonthlyBill();
 
+            infoText.text = "Bill paid";
             Debug.Log("Bill paid");
             return true;
         }
@@ -361,6 +373,7 @@ namespace Controllers {
         }
 
         private void ProcessHardwareFailure(float deltaTime) {
+            if (gameClock.CurrentDateTime < hardwareProtectionEnds) return;
             int workingModemCount = modemCount - brokenModems;
 
             for (int i = 0; i < workingModemCount; i++) {
@@ -368,6 +381,7 @@ namespace Controllers {
 
                 if (Random.value < chance) {
                     brokenModems++;
+                    infoText.text = "A modem has broke";
                     Debug.Log("A modem has broke");
                 }
             }
@@ -379,6 +393,7 @@ namespace Controllers {
 
                 if (Random.value < chance) {
                     brokenServers++;
+                    infoText.text = "A server has broke";
                     Debug.Log("A server has broken");
                 }
             }
@@ -390,6 +405,7 @@ namespace Controllers {
             Money -= modemRepairCost;
             brokenModems--;
 
+            infoText.text = "Modem repaired";
             Debug.Log("Modem repaired");
             return true;
         }
@@ -400,6 +416,7 @@ namespace Controllers {
             Money -= serverRepairCost;
             brokenServers--;
 
+            infoText.text = "Server repaired";
             Debug.Log("Server repaired");
             return true;
         }

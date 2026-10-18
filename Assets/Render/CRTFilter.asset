@@ -77,21 +77,21 @@ MonoBehaviour:
   preset: 6
   pixelResolutionX: 290
   pixelResolutionY: 210
-  screenBend: 1.24
-  screenOverscan: 1.5
-  vignetteSize: 0
-  vignetteSmooth: 2
-  vignetteRound: 87
-  blur: 0.32
-  bleed: 0.1
+  screenBend: 0.51
+  screenOverscan: 0.5
+  vignetteSize: 5.7
+  vignetteSmooth: 2.8
+  vignetteRound: 70
+  blur: 0.8
+  bleed: 0
   smidge: 0
   scanlinesStrength: 2.8
-  apertureStrength: 0.47
-  shadowlines: 1.4
-  shadowlinesSpeed: 2
-  shadowlinesAlpha: 0.026
-  noiseSize: 50
-  noiseSpeed: 10
+  apertureStrength: 1
+  shadowlines: 4.2
+  shadowlinesSpeed: 0.5
+  shadowlinesAlpha: 0.005
+  noiseSize: 0
+  noiseSpeed: 0
   noiseAlpha: 0.242
   glitchFrequency: 0.026
   glitchBands: 26
@@ -103,10 +103,10 @@ MonoBehaviour:
   glitchNoiseSpeed: 0
   brightness: 1
   contrast: 1
-  gamma: 1
-  red: 1
-  green: 1
-  blue: 1
+  gamma: 0.4
+  red: 1.2
+  green: 0.5
+  blue: 0
   chromaticAberration: 0.3
   redOffset: {x: 0.030000001, y: 0.030000001}
   blueOffset: {x: 0, y: -0.042}
